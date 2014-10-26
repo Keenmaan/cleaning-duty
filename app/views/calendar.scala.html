@@ -1,0 +1,27 @@
+<div class="container">
+    <h2>Cleaning Duty!</h2>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th style="width:104px;">Monday</th>
+                <th style="width:104px;">Tuesday</th>
+                <th style="width:104px;">Wednesday</th>
+                <th style="width:104px;">Thursday</th>
+                <th style="width:104px;">Friday</th>
+                <th style="width:104px;">Saturday</th>
+                <th style="width:104px;">Sunday</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(i <- 0 to 4) {
+            <tr>
+            @for(j <- 1 to 7) {
+                <td>@(i*7+j)
+                    @controllers.RosterCalendar.getWorker(i*7+j)
+                </td>
+            }
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

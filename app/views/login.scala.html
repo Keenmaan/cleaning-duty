@@ -1,0 +1,41 @@
+@(form: Form[User])
+
+@main {
+    <div class="container">
+    @helper.form(routes.Authentication.login, 'class -> "form-signin") {
+        <h2 class="form-signin-heading" align="center">Log in</h2>
+        <br>
+        @helper.inputText(form("name"),
+            'class -> "form-control",
+            'placeholder -> "Enter name",
+            '_label -> "Name:",
+            '_showConstraints -> false,
+            '_showErrors -> false
+        )
+        @helper.inputPassword(form("password"),
+            'class -> "form-control",
+            'placeholder -> "Enter password",
+            '_label -> "Password:",
+            '_showConstraints -> false,
+            '_showErrors -> false
+        )
+       <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+        @for(error <- form("global").errors) {
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span></button>
+                @error.message
+            </div>
+        }
+        @if(form.hasGlobalErrors) {
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span></button>
+                <strong>Error. </strong>@form.globalError.message
+            </div>
+        }
+    }
+    </div>
+}

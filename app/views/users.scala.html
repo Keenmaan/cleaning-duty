@@ -1,0 +1,23 @@
+@(users: List[User])
+
+@main {
+    <table class="table table-bordered table-condensed table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                @*<th>email</th>*@
+                @*<th>actions</th>*@
+            </tr>
+        </thead>
+        <tbody>
+        @for(p <- users) {
+            <tr>
+                <td>@p.id</td>
+                <td>@p.name</td>
+                @*<td>@p.email</td>*@
+            </tr>
+        }
+        </tbody>
+    </table>
+}
