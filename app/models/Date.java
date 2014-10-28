@@ -5,6 +5,7 @@ import play.db.ebean.Model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  * Created by keen on 10/23/14.
@@ -27,20 +28,11 @@ public class Date extends Model{
     @ManyToOne
     public Worker worker;
 
-    @ManyToOne
-    public Roster roster;
+    @OneToOne
+    public Holiday holiday;
 
     public static Model.Finder<String,Date> find = new Model.Finder<>(
             String.class, Date.class
     );
-
-    public void setRoster(Roster roster) {
-        this.roster = roster;
-    }
-
-    public void setWorker(Worker worker) {
-        this.worker = worker;
-    }
-
 
 }

@@ -1,29 +1,6 @@
 @(message: String)
 
 @main {
-    @message
-    <br>
-    wtf
-    <br>
-    @controllers.Users.getCurrentUser.name
-    @controllers.RosterCalendar.currentTime
-    <br>
-    AADSfdsa
-    <br>
-    <input data-ng-model="input" autofocus>
-    <br/>
-    <h2 data-ng-model="input"> {{input}}</h2>
-
-    <br><br>
     @calendar()
-
-    @*<div data-ng-controller="SearchController">*@
-        @*<input data-ng-model="input" data-ng-change="doSearch(input)" autofocus>*@
-        @*<h2>There are {{ results.length }} results</h2>*@
-        @*<ul>*@
-            @*<li data-ng-repeat="result in results">*@
-                @*{{ result }}*@
-            @*</li>*@
-        @*</ul>*@
-    @*</div>*@
+    @message
 }

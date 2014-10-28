@@ -1,11 +1,15 @@
 package controllers;
 
 import models.Date;
+import models.Holiday;
 import models.User;
+import models.Worker;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.index;
+
+import java.util.List;
 
 public class Application extends Controller {
 
@@ -21,6 +25,21 @@ public class Application extends Controller {
     }
 
     public static void clearDatabase() {
-        Date.find.where();
+        List<Date> date=Date.find.all();
+        for (Date d:date){
+            d.delete();
+            d.save();
+        }
+        List<Worker> workers=Worker.find.all();
+        for (Worker w:workers){
+            w.delete();
+            w.save();
+        }
+        List<Holiday> holidays=Holiday.find.all();
+        for (Holiday h:holidays){
+            h.delete();
+            h.save();
+        }
+        Worker.clearDates();
     }
 }

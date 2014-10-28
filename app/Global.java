@@ -1,11 +1,14 @@
 import controllers.RosterCalendar;
+import controllers.RosterOptions;
 import controllers.Users;
 import controllers.Workers;
-import models.Roster;
-import models.Worker;
+import models.PolishHolidays;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Global extends GlobalSettings {
 
@@ -24,10 +27,21 @@ public class Global extends GlobalSettings {
         else
             Logger.info("Admin found.");
         controllers.Application.clearDatabase();
-        Worker.clearDates();
-        Roster.clearDates();
-        Workers.createWorker("M", "F");
-        Workers.createWorker("Mzxc","Fxzcz");
+
+        if(RosterOptions.checkIfRosterExists()==null){
+            RosterOptions.createNewRoster("DefaultRoster");
+            RosterOptions.useRoster("DefaultRoster");
+
+        }
+        Calendar calendar=new GregorianCalendar(2014, 10, 01);
+        RosterOptions.addHoliday(PolishHolidays.wielkanoc(GregorianCalendar.getInstance().get(Calendar.YEAR)),"Wielkanoc");
+        RosterOptions.addHoliday(calendar,"Wszystkich Świętych");
+        RosterOptions.addHoliday(new GregorianCalendar(2014,10,05));
+
+        Workers.createWorker("Marcin", "Kowalski");
+        Workers.createWorker("Mariusz","Iksiński");
+        Workers.createWorker("Łucja","Iksińska");
+        Workers.createWorker("Mateusz","Horwacy-Dębicki");
         RosterCalendar.calculate();
     }
 

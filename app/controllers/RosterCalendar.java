@@ -1,7 +1,7 @@
 package controllers;
 
 import models.Date;
-import models.Roster;
+import models.Holiday;
 import models.Worker;
 import play.Logger;
 
@@ -16,20 +16,79 @@ import java.util.List;
  */
 public class RosterCalendar {
 
-    public static String getWorker(int i){
-        String s="kup";
-        Roster roster=Roster.find.findUnique();
+    public static String getClassColor(int i){
+        String workDay="info";
+        String currentDay="warning";
+        String weekend="success";
+        String holiday="danger";
+        String old="action";
+        i=transform(i);
+        if(checkDay(i)){
+            return currentDay;
+        }
+        Calendar cal= GregorianCalendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR,i);
+        List<Date> roster=Date.find.findList();
+        if(roster!=null && i<roster.size() && i>=0){
+            if(roster.get(i).workDay)
+                return workDay;
+            if(roster.get(i).holiday!=null)
+                return holiday;
+            //if(checkWeekend(cal))
+                return weekend;
+        }
+        return old;
+    }
+    public static int transform(int i){
+        //List<Date> roster=Date.find.findList();
         Calendar cal = GregorianCalendar.getInstance();
-        if(roster!=null)
-            s=roster.dates.get(i).worker.firstName+" "+roster.dates.get(i).worker.lastName;
+        int a=cal.get(Calendar.DAY_OF_WEEK);
+        //a=1;
+        if (a==1)
+            a=8;
+        return i-a+2;
+    }
+
+    public static Boolean checkDay(int i){
+        if (i==0)
+            return true;
+        else
+            return false;
+    }
+
+    public static String getDay(int i){
+        List<Date> roster=Date.find.findList();
+        Calendar cal = GregorianCalendar.getInstance();
+        int a=transform(i);
+        cal.add(Calendar.DAY_OF_YEAR, a);
+
+        return String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+    }
+
+    public static String getWorker(int i){
+        String s="";
+        List<Date> roster=Date.find.findList();
+        //Calendar cal = GregorianCalendar.getInstance();
+        i=transform(i);
+
+        if(roster!=null && i<roster.size() && i>=0){
+                if (roster.get(i).workDay && roster.get(i).worker!=null){
+                    s=roster.get(i).worker.firstName+" "+roster.get(i).worker.lastName;
+            }
+            else{
+                if(roster.get(i).holiday!=null){
+                    if (roster.get(i).holiday.name!=null)
+                        s=roster.get(i).holiday.name;
+                }
+            }
+        }
+
         return s;
     }
 
     public static void calculate() {
         Calendar cal = GregorianCalendar.getInstance();
-        Roster roster = Roster.find.findUnique();
-        if (roster==null)
-            roster=createRoster();
+        List<Date> roster = Date.find.findList();
 
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -38,23 +97,49 @@ public class RosterCalendar {
             System.out.println("Dupa");
         }
         else{
-            //Worker.clearDates();
-            //Roster.clearDates();
             int i=0;
-            while(i<31){
-                for(Worker w: workerList){
-                    Logger.info("worker"+w.firstName);
-                    cal.add(Calendar.DAY_OF_YEAR, 1);
-                    Date date=createDate(cal);
-                    w.addDate(date);
-                    //w.update();
-                    roster.addDate(date);
-                    //roster.update();
-                    Logger.info("date: " + df.format(date.date.getTime()) + ", w.firstName: " + w.firstName + ", i=" + i);
-                    i++;
+            Holiday holiday;
+            while(i<50){
+                for(int j=0;j<workerList.size();i++){
+                Date date=createDate(cal);
+
+                    if (!date.workDayLock){
+                    holiday=checkHolidays(cal);
+                    if(holiday!=null){
+                        date.workDay=false;
+                        date.holiday=holiday;
+                        date.update();
+                    } else if(checkWeekend(cal)){
+                        date.workDay=false;
+                        date.update();
+                    }
+                }
+                if (date.workDay){
+                        date.worker=workerList.get(j);
+                        date.update();
+                        Logger.info("worker: " +date.worker.firstName);
+                        Logger.info("date: " + df.format(date.date.getTime()) + ", w.firstName: "+workerList.get(j).firstName + ", i=" + i);
+                        j++;
+                    }
+                cal.add(Calendar.DAY_OF_YEAR, 1);
                 }
             }
         }
+    }
+    public static Boolean checkWeekend(Calendar cal){
+        return cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
+                || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+    }
+    public static Holiday checkHolidays(Calendar cal){
+        List<Holiday> holidays=Holiday.find.all();
+        if (holidays!=null){
+            for (Holiday h:holidays){
+                if(h.year==cal.get(Calendar.YEAR) && h.dayOfTheYear==cal.get(Calendar.DAY_OF_YEAR)){
+                    return h;
+                }
+            }
+        }
+        return null;
     }
 
     public static String currentTime(){
@@ -73,13 +158,9 @@ public class RosterCalendar {
         dateObject.locked=false;
         dateObject.workDay=true;
         dateObject.workDayLock=false;
-        //dateObject.save();
+        //dateObject.worker=w;
+        dateObject.save();
         return dateObject;
     }
 
-    public static Roster createRoster(){
-        Roster roster=new Roster();
-        roster.save();
-        return roster;
-    }
 }

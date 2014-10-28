@@ -1,6 +1,5 @@
 <div class="container">
-    <h2>Cleaning Duty!</h2>
-    <table class="table table-striped table-bordered">
+    <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th style="width:104px;">Monday</th>
@@ -15,10 +14,14 @@
         <tbody>
         @for(i <- 0 to 4) {
             <tr>
-            @for(j <- 1 to 7) {
-                <td>@(i*7+j)
-                    @controllers.RosterCalendar.getWorker(i*7+j)
-                </td>
+            @for(j <- 0 to 6) {
+                @defining(i*7+j){ k =>
+                    <td class="@controllers.RosterCalendar.getClassColor(k)">
+                    <h3>@controllers.RosterCalendar.getDay(k)</h3>
+                    <br>
+                    @controllers.RosterCalendar.getWorker(k)
+                    </td>
+                }
             }
             </tr>
         }

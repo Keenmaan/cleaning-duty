@@ -9,8 +9,17 @@ create table date (
   work_day                  boolean,
   work_day_lock             boolean,
   worker_id                 bigint,
-  roster_id                 bigint,
+  holiday_id                bigint,
   constraint pk_date primary key (date))
+;
+
+create table holiday (
+  id                        bigint not null,
+  name                      varchar(255),
+  day_of_the_year           integer,
+  year                      integer,
+  roster_name               varchar(255),
+  constraint pk_holiday primary key (id))
 ;
 
 create table leave (
@@ -22,8 +31,9 @@ create table leave (
 ;
 
 create table roster (
-  id                        bigint auto_increment not null,
-  constraint pk_roster primary key (id))
+  name                      varchar(255) not null,
+  in_use                    boolean,
+  constraint pk_roster primary key (name))
 ;
 
 create table user (
@@ -47,16 +57,22 @@ create table worker (
 
 create sequence date_seq;
 
+create sequence holiday_seq;
+
+create sequence roster_seq;
+
 create sequence user_seq;
 
 alter table date add constraint fk_date_worker_1 foreign key (worker_id) references worker (id) on delete restrict on update restrict;
 create index ix_date_worker_1 on date (worker_id);
-alter table date add constraint fk_date_roster_2 foreign key (roster_id) references roster (id) on delete restrict on update restrict;
-create index ix_date_roster_2 on date (roster_id);
-alter table leave add constraint fk_leave_worker_3 foreign key (worker_id) references worker (id) on delete restrict on update restrict;
-create index ix_leave_worker_3 on leave (worker_id);
-alter table user add constraint fk_user_worker_4 foreign key (worker_id) references worker (id) on delete restrict on update restrict;
-create index ix_user_worker_4 on user (worker_id);
+alter table date add constraint fk_date_holiday_2 foreign key (holiday_id) references holiday (id) on delete restrict on update restrict;
+create index ix_date_holiday_2 on date (holiday_id);
+alter table holiday add constraint fk_holiday_roster_3 foreign key (roster_name) references roster (name) on delete restrict on update restrict;
+create index ix_holiday_roster_3 on holiday (roster_name);
+alter table leave add constraint fk_leave_worker_4 foreign key (worker_id) references worker (id) on delete restrict on update restrict;
+create index ix_leave_worker_4 on leave (worker_id);
+alter table user add constraint fk_user_worker_5 foreign key (worker_id) references worker (id) on delete restrict on update restrict;
+create index ix_user_worker_5 on user (worker_id);
 
 
 
@@ -65,6 +81,8 @@ create index ix_user_worker_4 on user (worker_id);
 SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists date;
+
+drop table if exists holiday;
 
 drop table if exists leave;
 
@@ -77,6 +95,10 @@ drop table if exists worker;
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists date_seq;
+
+drop sequence if exists holiday_seq;
+
+drop sequence if exists roster_seq;
 
 drop sequence if exists user_seq;
 
