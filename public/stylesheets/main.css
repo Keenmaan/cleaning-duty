@@ -1,6 +1,39 @@
 body {
     padding-bottom: 40px;
-    background-color: #9acfea;
+    background-color: #EFFBD3;
+}
+
+.color-primary-0 { color: #9FC15B }	/* Main Primary color */
+.color-primary-1 { color: #E2F4BE }
+.color-primary-2 { color: #CAE791 }
+.color-primary-3 { color: #789B30 }
+.color-primary-4 { color: #51710F }
+
+.navbar{
+    background-color: #D1F083;
+}
+.jumbotron{
+    background-color:#E0F6AB !important;
+}
+.workday, .table-hover>tbody>tr:hover>.workday{
+    background-color:#8DB2C6;
+}
+.weekend, .table-hover>tbody>tr:hover>.weekend{
+    background-color:#99DC79;
+}
+.holiday, .table-hover>tbody>tr:hover>.holiday{
+    background-color:#FFA08C;
+}
+.currentday, .table-hover>tbody>tr:hover>.currentday{
+    background-color:#5C8AA2;
+}
+.old, .table-hover>tbody>tr:hover>.old{
+    background-color:#C2D9E5;
+}
+
+.table-hover>tbody>tr>td:hover, .table-hover>tbody>tr:hover>th, .selected{
+    background-color: #3C6F8A !important;
+    color:#eeeeee;
 }
 
 .form-signin {

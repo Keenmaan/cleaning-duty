@@ -14,11 +14,15 @@ public class Leave extends Model {
     public Long id;
 
     @Constraints.Required
-    public java.sql.Date dateStart;
+    public java.sql.Date date;
 
-    @Constraints.Required
-    public java.sql.Date dateEnd;
+//    @Constraints.Required
+//    public java.sql.Date dateEnd;
 
     @ManyToOne
     public Worker worker;
+
+    public static Model.Finder<String,Leave> find = new Model.Finder<>(
+            String.class, Leave.class
+    );
 }

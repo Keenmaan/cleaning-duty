@@ -1,0 +1,141 @@
+@(user:User)
+<div data-ng-app data-ng-controller="leavesController" class="tab-pane fade" id="leaves">
+    <div class="panel panel-default">
+        <div class="panel-heading">Add your leave:</div>
+        <div class="panel-body">
+            <h3>Current leaves:</h3>
+            @if(user.worker!=null){
+                @if(user.worker.leaves!=null){
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>Id:</td>
+                                <td>Date:</td>
+                                <td>Name:</td>
+                                <th width="85">Remove:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @for(p <- user.worker.leaves){
+                            <tr>
+                                <td>@p.id</td>
+                                <td>@p.date.toString</td>
+                                <td>@p.worker.firstName &nbsp @p.worker.lastName</td>
+                                <td>
+                                    <a href="/removeLeave?id=@p.id">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+            }
+            <div class="col-md-*">
+                <div class="col-md-6">
+                    <h3>From:</h3>
+            <table style="max-width: 350px" class="table table-hover table-bordered table-responsive">
+                <thead class="panel-heading bg-primary">
+                    <tr>
+                        <th>Mon</th>
+                        <th>Tue</th>
+                        <th>Wed</th>
+                        <th>Thu</th>
+                        <th>Fri</th>
+                        <th>Sat</th>
+                        <th>Sun</th>
+                    </tr>
+                </thead>
+                <tbody class="panel-body">
+                    @for(i <- 0 to 4) {
+                        <tr>
+                        @for(j <- 0 to 6) {
+                            @defining(i*7+j){ k =>
+                                <td data-ng-class="startSlot@k"
+                                class="@controllers.RosterCalendar.getClassColor(k)"
+                                data-ng-click="setStartDate(startSlot@k,@k)">
+                                @controllers.RosterCalendar.getDay(k)
+                                </td>
+                            }
+                        }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+                </div>
+                <div class="col-md-6">
+                    <h3>To:</h3>
+            <table style="max-width: 350px" class="table table-hover table-bordered table-responsive">
+                <thead class="panel-heading bg-primary">
+                    <tr>
+                        <th>Mon</th>
+                        <th>Tue</th>
+                        <th>Wed</th>
+                        <th>Thu</th>
+                        <th>Fri</th>
+                        <th>Sat</th>
+                        <th>Sun</th>
+                    </tr>
+                </thead>
+                <tbody class="panel-body">
+                @for(i <- 0 to 4) {
+                    <tr>
+                    @for(j <- 0 to 6) {
+                        @defining(i*7+j){ k =>
+                            <td data-ng-class="endSlot@k"
+                            class="@controllers.RosterCalendar.getClassColor(k)"
+                            data-ng-click="setEndDate(endSlot@k,@k)">
+                            @controllers.RosterCalendar.getDay(k)
+                            </td>
+                        }
+                    }
+                    </tr>
+                }
+                </tbody>
+            </table>
+                </div>
+             </div>
+            <div class="well">
+                <h3>You have chosen dates: </h3>
+                {{startDate + " " + endDate}}
+                <br>
+                <a data-ng-href="/addLeave?id=@user.id;s={{startDate}};e={{endDate}}">
+                    <h4>Apply selected leave?
+                        <span class="glyphicon glyphicon-ok"> </span>
+                    </h4>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function leavesController($scope){
+        $scope.startDate="2014 10 13";
+        $scope.endDate="2014 10 24";
+        $scope.datesAreSet=0;
+        $scope.startSlotId=null;
+        $scope.endSlotId=null;
+        $scope.allDates= function(l){
+            return $scope.startDate + " " + $scope.endDate + "  " + l;
+        };
+        $scope.setStartDate=function(slot,value){
+            if ($scope.startSlotId!=null){
+                $scope.startSlotId.value=null;
+            }
+            $scope.slot="selected";
+            $scope.startSlotId=slot;
+            $scope.startDate=value;
+            return value;
+        };
+        $scope.setEndDate=function(slot,value){
+        if ($scope.EndSlotId!=null){
+        $scope.EndSlotId.value=null;
+        }
+        $scope.slot="selected";
+        $scope.EndSlotId=slot;
+            $scope.endDate=value;
+            return value;
+            };
+    }
+</script>

@@ -1,7 +1,5 @@
-import controllers.RosterCalendar;
 import controllers.RosterOptions;
 import controllers.Users;
-import controllers.Workers;
 import models.PolishHolidays;
 import play.Application;
 import play.GlobalSettings;
@@ -26,27 +24,18 @@ public class Global extends GlobalSettings {
         }
         else
             Logger.info("Admin found.");
-        controllers.Application.clearDatabase();
-
+        //controllers.Application.clearDatabase();
         if(RosterOptions.checkIfRosterExists()==null){
             RosterOptions.createNewRoster("DefaultRoster");
             RosterOptions.useRoster("DefaultRoster");
-
+            Calendar calendar=new GregorianCalendar(2014, 10, 01);
+            RosterOptions.addHoliday(PolishHolidays.wielkanoc(GregorianCalendar.getInstance().get(Calendar.YEAR)),"Wielkanoc");
+            RosterOptions.addHoliday(calendar,"Wszystkich Świętych");
+            RosterOptions.addHoliday(new GregorianCalendar(2014,10,05));
         }
-        Calendar calendar=new GregorianCalendar(2014, 10, 01);
-        RosterOptions.addHoliday(PolishHolidays.wielkanoc(GregorianCalendar.getInstance().get(Calendar.YEAR)),"Wielkanoc");
-        RosterOptions.addHoliday(calendar,"Wszystkich Świętych");
-        RosterOptions.addHoliday(new GregorianCalendar(2014,10,05));
-
-        Workers.createWorker("Marcin", "Kowalski");
-        Workers.createWorker("Mariusz","Iksiński");
-        Workers.createWorker("Łucja","Iksińska");
-        Workers.createWorker("Mateusz","Horwacy-Dębicki");
-        RosterCalendar.calculate();
     }
 
     public void onStop(Application app) {
         Logger.info("Application shutdown...");
     }
-
 }

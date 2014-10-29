@@ -24,8 +24,7 @@ create table holiday (
 
 create table leave (
   id                        bigint auto_increment not null,
-  date_start                date,
-  date_end                  date,
+  date                      date,
   worker_id                 bigint,
   constraint pk_leave primary key (id))
 ;
@@ -39,12 +38,10 @@ create table roster (
 create table user (
   id                        bigint not null,
   name                      varchar(255),
-  email                     varchar(255),
   password                  varchar(255),
   is_admin                  boolean,
   worker_id                 bigint,
   constraint uq_user_name unique (name),
-  constraint uq_user_email unique (email),
   constraint pk_user primary key (id))
 ;
 
@@ -52,6 +49,10 @@ create table worker (
   id                        bigint auto_increment not null,
   first_name                varchar(255),
   last_name                 varchar(255),
+  confirmed                 boolean,
+  email                     varchar(255),
+  user_id                   bigint,
+  constraint uq_worker_email unique (email),
   constraint pk_worker primary key (id))
 ;
 
@@ -73,6 +74,8 @@ alter table leave add constraint fk_leave_worker_4 foreign key (worker_id) refer
 create index ix_leave_worker_4 on leave (worker_id);
 alter table user add constraint fk_user_worker_5 foreign key (worker_id) references worker (id) on delete restrict on update restrict;
 create index ix_user_worker_5 on user (worker_id);
+alter table worker add constraint fk_worker_user_6 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_worker_user_6 on worker (user_id);
 
 
 

@@ -1,23 +1,46 @@
 @(users: List[User])
 
 @main {
-    <table class="table table-bordered table-condensed table-hover table-responsive">
-        <thead>
+    <div class="panel panel-default">
+
+    <table class="table table-bordered table-hover table-responsive">
+        <thead class="panel-heading bg-primary">
             <tr>
-                <th>id</th>
-                <th>name</th>
-                @*<th>email</th>*@
-                @*<th>actions</th>*@
+                <th width="45">ID</th>
+                <th>Login</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>E-mail</th>
+                <th width="85">Confirmed</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="panel-body">
         @for(p <- users) {
             <tr>
                 <td>@p.id</td>
                 <td>@p.name</td>
-                @*<td>@p.email</td>*@
+                <td>@if(p.worker!=null){@p.worker.firstName}</td>
+                <td>@if(p.worker!=null){@p.worker.lastName}</td>
+                <td>@if(p.worker!=null){@p.worker.email}</td>
+                <td @if(!Workers.confirmed(p) && p.worker!=null){
+                    class="danger"
+                } else {
+                    @if(Workers.confirmed(p)) { class="success"}
+                }>@if(p.worker!=null){@p.worker.confirmed}
+                    @if(p.worker!=null) {
+                        @if(!p.worker.confirmed){
+                            <a href="/confirm?id=@p.id">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        } else {
+                            <a href="/unConfirm?id=@p.id">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </a>
+                        }
+                    }</td>
             </tr>
         }
         </tbody>
     </table>
+    </div>
 }

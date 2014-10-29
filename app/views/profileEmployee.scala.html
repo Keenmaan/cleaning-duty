@@ -1,0 +1,55 @@
+@(workerForm : Form[Worker], user : User)
+<div class="tab-pane fade" id="employeeData">
+    <div class="panel panel-default">
+        <div class="panel-heading">Change your employee data: </div>
+        <div class="panel-body">
+        @helper.form(routes.Profile.dataUpdate(), 'class -> "form-signin") {
+            <h2 class="form-signin-heading" align="center">Employee data:</h2>
+            <br>
+            @helper.inputText(workerForm("firstName"),
+                'class -> "form-control",
+                'placeholder -> "Enter first name",
+                '_label -> "First name:",
+                '_showConstraints -> false,
+                if(user.worker!=null){
+                    'value -> user.worker.firstName
+                } else {
+                    'value -> ""
+                }
+            )
+            @helper.inputText(workerForm("lastName"),
+                'class -> "form-control",
+                'placeholder -> "Enter last name",
+                '_label -> "Last name:",
+                '_showConstraints -> false,
+                if(user.worker!=null){
+                    'value -> user.worker.lastName
+                } else {
+                    'value -> ""
+                }
+            )
+            @helper.inputText(workerForm("email"),
+                'class -> "form-control",
+                'placeholder -> "Enter e-mail",
+                '_label -> "E-mail address:",
+                '_showConstraints -> false,
+                'type -> "email",
+                if(user.worker!=null){
+                    'value -> user.worker.email
+                } else {
+                    'value -> ""
+                }
+            )
+            <button class="btn btn-primary" type="submit" value="employeeData">Save</button>
+            @if(workerForm.hasGlobalErrors) {
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span></button>
+                    <strong>Error. </strong>@workerForm.globalError.message
+                </div>
+            }
+        }
+        </div>
+    </div>
+</div>

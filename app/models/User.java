@@ -19,10 +19,6 @@ public class User extends Model{
     @Column(unique=true)
     public String name;
 
-    @Column(unique=true)
-    @Constraints.Email
-    public String email;
-
     //Password
     public static final int passwordLength=3;
     @Constraints.Required

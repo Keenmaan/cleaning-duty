@@ -17,16 +17,20 @@ public class Worker extends Model{
     @Constraints.Required
     public String lastName;
 
+    public Boolean confirmed;
+
+    @Column(unique=true)
+    @Constraints.Email
+    public String email;
+
     @OneToMany(targetEntity=Leave.class, mappedBy="worker", cascade = CascadeType.ALL)
     public List<Leave> leaves;
 
     @OneToMany(targetEntity=Date.class, mappedBy="worker")
     public List<Date> dates;
 
-//    public void addDate(Date date){
-//        this.dates.add(date);
-//        date.setWorker(this);
-//    }
+    @OneToOne(targetEntity = User.class)
+    public User user;
 
     public static Model.Finder<String,Worker> find = new Model.Finder<>(
             String.class, Worker.class

@@ -1,0 +1,41 @@
+@(workerForm : Form[Worker], user : User)
+
+@main {
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#account" data-toggle="tab">Account</a></li>
+            <li class=""><a href="#employeeData" data-toggle="tab">Employee Data</a></li>
+            <li class=""><a href="#leaves" data-toggle="tab">Leaves</a></li>
+            <li class=""><a href="#changeUsername" data-toggle="tab">Username</a></li>
+            <li class=""><a href="#changeEmail" data-toggle="tab">Email</a></li>
+            <li class=""><a href="#changePassword" data-toggle="tab">Password</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            @profileAccount(user)
+            @profileEmployee(workerForm,user)
+            @profileLeave(user)
+            <div class="tab-pane fade" id="changeUsername">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Change your Username:</div>
+                    <div class="panel-body">
+                        This is your username :)
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="changePassword">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Change your password:</div>
+                    <div class="panel-body">
+                        This is your password;
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="changeEmail">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Change your E-mail address:</div>
+                    <div class="panel-body">
+                        This is your email.
+                    </div>
+                </div>
+            </div>
+        </div>
+}

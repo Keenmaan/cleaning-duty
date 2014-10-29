@@ -17,3 +17,10 @@ GET         /login               controllers.Authentication.loginForm()
 POST        /login               controllers.Authentication.login()
 
 GET         /logout              controllers.Authentication.logout()
+
+GET         /profile             controllers.Profile.profile()
+POST        /profile             controllers.Profile.dataUpdate()
+GET         /confirm             controllers.Users.confirm(id: Long)
+GET         /unConfirm           controllers.Users.unConfirm(id: Long)
+GET         /addLeave            controllers.Profile.addLeave(id: Long,s : String,e : String)
+GET         /removeLeave        controllers.Profile.removeLeave(id: Long)

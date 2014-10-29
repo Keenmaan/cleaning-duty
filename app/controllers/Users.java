@@ -5,6 +5,7 @@ package controllers;
  */
 
 import models.User;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -65,5 +66,35 @@ public class Users extends Controller {
 
     public static User getCurrentUser(){
         return User.find.where().eq("name", session("name")).findUnique();
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result confirm(Long id){
+        List<User> userList = User.find.all();
+        if(Users.getCurrentUser().getIsAdmin()){
+            User user=User.find.where().eq("id",id).findUnique();
+            Logger.info("user = " + user);
+            user.worker.confirmed=true;
+            user.worker.update();
+            RosterCalendar.calculate();
+            return ok(users.apply(userList));
+        }
+        else
+            return badRequest(users.apply(userList));
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result unConfirm(Long id){
+        List<User> userList = User.find.all();
+        if(Users.getCurrentUser().getIsAdmin()){
+            User user=User.find.where().eq("id",id).findUnique();
+            Logger.info("user = "+user);
+            user.worker.confirmed=false;
+            user.worker.update();
+            RosterCalendar.calculate();
+            return ok(users.apply(userList));
+        }
+        else
+            return badRequest(users.apply(userList));
     }
 }
